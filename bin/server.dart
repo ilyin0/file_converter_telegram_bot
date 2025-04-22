@@ -1,8 +1,10 @@
+import 'dart:io';
+
 import 'package:teledart/teledart.dart';
 import 'package:teledart/telegram.dart';
 
 Future<void> main() async {
-  final botToken = String.fromEnvironment(_botTokenKey);
+  final botToken = Platform.environment[_botTokenKey]!;
 
   final username = (await Telegram(botToken).getMe()).username;
   var teledart = TeleDart(botToken, Event(username!));
