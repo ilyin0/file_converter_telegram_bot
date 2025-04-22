@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart';
 import 'package:shelf_router/shelf_router.dart';
+import 'package:teledart/teledart.dart';
+import 'package:teledart/telegram.dart';
 
 // Configure routes.
 final _router =
@@ -32,4 +34,19 @@ void main(List<String> args) async {
   final port = int.parse(Platform.environment['PORT'] ?? '8080');
   final server = await serve(handler, ip, port);
   print('Server listening on port ${server.port}');
+
+  final botToken = String.fromEnvironment(_botTokenKey);
+
+  final username = (await Telegram(botToken).getMe()).username;
+  var teledart = TeleDart(botToken, Event(username!));
+
+  teledart.start();
+
+  teledart.onCommand('answer').listen((event) {
+    print(event);
+    final chatId = event.chat.id;
+    teledart.sendMessage(chatId, 'Hello world!');
+  });
 }
+
+const String _botTokenKey = 'bot_token';
