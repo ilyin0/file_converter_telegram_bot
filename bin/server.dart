@@ -12,9 +12,8 @@ Future<void> main() async {
   teledart.start();
 
   teledart.onCommand('answer').listen((event) {
-    print(event);
     final chatId = event.chat.id;
-    teledart.sendMessage(chatId, 'Hello world!');
+    teledart.sendMessage(chatId, 'Hello, ${event.chat.username}!');
   });
 }
 
